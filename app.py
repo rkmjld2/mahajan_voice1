@@ -1,12 +1,13 @@
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain.chains import RetrievalQA
 from gtts import gTTS
 import tempfile
 import os
+
 
 st.title("📄 RAG PDF Voice Assistant (Groq)")
 
@@ -49,4 +50,5 @@ if uploaded_file:
         tts.save(tmp_file.name)
 
         st.audio(tmp_file.name)
+
 
