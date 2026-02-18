@@ -1,6 +1,6 @@
 streamlit
-langchain>=0.2.0
-langchain-core>=0.2.0          # ← important
+langchain>=0.3.0                # or latest
+langchain-core>=0.3.0           # critical for these imports
 langchain-community
 langchain-groq
 langchain-text-splitters
