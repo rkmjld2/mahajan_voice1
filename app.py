@@ -13,10 +13,10 @@ st.title("📄 RAG PDF Voice Assistant (Groq)")
 uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
 if uploaded_file:
-    with open("temp.pdf", "wb") as f:
+    with open("sample.pdf", "wb") as f:
         f.write(uploaded_file.read())
 
-    loader = PyPDFLoader("temp.pdf")
+    loader = PyPDFLoader("sample.pdf")
     docs = loader.load()
 
     splitter = RecursiveCharacterTextSplitter(
@@ -49,3 +49,4 @@ if uploaded_file:
         tts.save(tmp_file.name)
 
         st.audio(tmp_file.name)
+
