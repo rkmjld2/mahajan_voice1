@@ -1,11 +1,10 @@
 streamlit
-langchain>=0.3.0                # or latest
-langchain-core>=0.3.0           # critical for these imports
+langchain>=0.3.0
+langchain-core>=0.3.0
 langchain-community
 langchain-groq
 langchain-text-splitters
 pypdf
 faiss-cpu
-gtts
 sentence-transformers
-torch
+gtts
