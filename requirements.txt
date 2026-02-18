@@ -1,8 +1,8 @@
-streamlit
-pymupdf
-speechrecognition
-pyttsx3
-langchain
-faiss-cpu
-sentence-transformers
-langchain-groq
+streamlit==1.31.0
+pymupdf==1.23.9
+speechrecognition==3.10.0
+pyttsx3==2.90
+langchain==0.1.16
+faiss-cpu==1.7.4
+sentence-transformers==2.2.2
+langchain-groq==0.0.2
