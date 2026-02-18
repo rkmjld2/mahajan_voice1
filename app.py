@@ -4,8 +4,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
-from langchain_core.prompts import ChatPromptTemplate          # ← fixed import
-from langchain.schema.runnable import RunnablePassthrough
+from langchain_core.prompts import ChatPromptTemplate          # fixed
+from langchain_core.runnables import RunnablePassthrough      # fixed
 from gtts import gTTS
 import tempfile
 import os
@@ -15,7 +15,6 @@ st.title("📄 RAG PDF Voice Assistant (Groq)")
 uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
 if uploaded_file is not None:
-    # Better to use a temporary file instead of always overwriting "sample.pdf"
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_pdf:
         tmp_pdf.write(uploaded_file.read())
         pdf_path = tmp_pdf.name
@@ -71,6 +70,6 @@ if uploaded_file is not None:
                 st.audio(tmp_audio.name)
 
     finally:
-        # Clean up the temporary PDF file
+        # Clean up temporary PDF
         if os.path.exists(pdf_path):
             os.unlink(pdf_path)
