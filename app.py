@@ -1,13 +1,12 @@
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitters import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from langchain.chains import RetrievalQA
 from gtts import gTTS
 import tempfile
-import os
-
 
 st.title("📄 RAG PDF Voice Assistant (Groq)")
 
@@ -26,7 +25,12 @@ if uploaded_file:
     )
     splits = splitter.split_documents(docs)
 
-    vectorstore = FAISS.from_documents(splits, embedding=None)
+    # ✅ Embeddings (required for FAISS)
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
+    )
+
+    vectorstore = FAISS.from_documents(splits, embeddings)
 
     llm = ChatGroq(
         groq_api_key=st.secrets["GROQ_API_KEY"],
@@ -44,11 +48,9 @@ if uploaded_file:
         answer = qa.run(question)
         st.write(answer)
 
-        # Text to Speech
+        # 🔊 Text to Speech
         tts = gTTS(answer)
         tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
         tts.save(tmp_file.name)
 
         st.audio(tmp_file.name)
-
-
