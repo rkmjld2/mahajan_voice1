@@ -1,9 +1,8 @@
-streamlit==1.31.0
-pymupdf==1.23.9
-speechrecognition==3.10.0
-pyttsx3==2.90
-langchain==0.2.1
-langchain-text-splitters==0.0.1
-faiss-cpu==1.7.4
-sentence-transformers==2.2.2
-langchain-groq==0.0.2
+streamlit
+langchain
+langchain-community
+langchain-groq
+pypdf
+faiss-cpu
+gtts
+python-dotenv
