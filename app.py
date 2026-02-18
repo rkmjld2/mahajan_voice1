@@ -4,7 +4,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
-from langchain.chains import RetrievalQA
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains import create_retrieval_chain
+from langchain.prompts import ChatPromptTemplate
 from gtts import gTTS
 import tempfile
 
@@ -25,27 +27,31 @@ if uploaded_file:
     )
     splits = splitter.split_documents(docs)
 
-    # ✅ Embeddings (required for FAISS)
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
 
     vectorstore = FAISS.from_documents(splits, embeddings)
+    retriever = vectorstore.as_retriever()
 
     llm = ChatGroq(
         groq_api_key=st.secrets["GROQ_API_KEY"],
         model_name="llama3-70b-8192"
     )
 
-    qa = RetrievalQA.from_chain_type(
-        llm=llm,
-        retriever=vectorstore.as_retriever()
+    prompt = ChatPromptTemplate.from_template(
+        "Answer the question based only on the context:\n\n{context}\n\nQuestion: {input}"
     )
+
+    document_chain = create_stuff_documents_chain(llm, prompt)
+    qa_chain = create_retrieval_chain(retriever, document_chain)
 
     question = st.text_input("Ask a question")
 
     if question:
-        answer = qa.run(question)
+        response = qa_chain.invoke({"input": question})
+        answer = response["answer"]
+
         st.write(answer)
 
         # 🔊 Text to Speech
