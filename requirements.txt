@@ -6,3 +6,5 @@ langchain-text-splitters
 pypdf
 faiss-cpu
 gtts
+sentence-transformers
+torch
