@@ -1,0 +1,8 @@
+streamlit
+pymupdf
+speechrecognition
+pyttsx3
+langchain
+faiss-cpu
+sentence-transformers
+langchain-groq
