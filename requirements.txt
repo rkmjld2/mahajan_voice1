@@ -6,3 +6,5 @@ pypdf
 faiss-cpu
 gtts
 python-dotenv
+
+
