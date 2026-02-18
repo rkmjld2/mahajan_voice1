@@ -8,6 +8,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.llms import Ollama  # or Groq if configured
 
+
 # --- Load PDF ---
 def load_pdf(pdf_path):
     doc = fitz.open(pdf_path)
@@ -57,3 +58,4 @@ if pdf_file:
             answer = qa.run(query)
             st.write("Answer:", answer)
             speak_text(answer)
+
