@@ -4,9 +4,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains import create_retrieval_chain
 from langchain.prompts import ChatPromptTemplate
+from langchain.schema.runnable import RunnablePassthrough
 from gtts import gTTS
 import tempfile
 
@@ -40,22 +39,25 @@ if uploaded_file:
     )
 
     prompt = ChatPromptTemplate.from_template(
-        "Answer the question based only on the context:\n\n{context}\n\nQuestion: {input}"
+        "Answer the question using the context:\n\n{context}\n\nQuestion: {question}"
     )
 
-    document_chain = create_stuff_documents_chain(llm, prompt)
-    qa_chain = create_retrieval_chain(retriever, document_chain)
+    def format_docs(docs):
+        return "\n\n".join(doc.page_content for doc in docs)
+
+    rag_chain = (
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+    )
 
     question = st.text_input("Ask a question")
 
     if question:
-        response = qa_chain.invoke({"input": question})
-        answer = response["answer"]
+        answer = rag_chain.invoke(question)
+        st.write(answer.content)
 
-        st.write(answer)
-
-        # 🔊 Text to Speech
-        tts = gTTS(answer)
+        tts = gTTS(answer.content)
         tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
         tts.save(tmp_file.name)
 
