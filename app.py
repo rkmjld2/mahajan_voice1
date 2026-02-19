@@ -69,10 +69,9 @@ if uploaded_file is not None:
                     # LLM
                     llm = ChatGroq(
                         groq_api_key=st.secrets["GROQ_API_KEY"],
-                        model_name="llama3-70b-8192",
+                        model_name="llama3-70b-8192",   # ← This is the culprit
                         temperature=0.3
-                    )
-
+                      )  
                     prompt = ChatPromptTemplate.from_template(
                         """Answer based only on the provided context. Be concise and accurate.
 
@@ -133,3 +132,4 @@ if uploaded_file is not None:
                     os.unlink(audio_path)
                 except:
                     pass
+
